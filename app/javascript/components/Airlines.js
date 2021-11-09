@@ -33,8 +33,6 @@ function Airlines() {
   const [airlines, setAirlines] = useState([]);
 
   useEffect(() => {
-    //Get all of our airlines from our api
-    //Update airlines in our state
     axios
       .get("/api/v1/airlines.json")
       .then((resp) => {
