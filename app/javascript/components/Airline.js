@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "./Header";
+import ReviewForm from "./ReviewForm";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -38,22 +39,49 @@ function Airline(props) {
       })
       .catch((resp) => console.log(resp));
   }, []);
+
+  const handleChange = (e) => {
+    e.preventDefault()
+    setReview(Object.assign({}, review, {[e.target.name]: e.target.value}))
+    console.log('review:', review)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const csrfToken = document.querySelector('[name=csrf-token]').content
+
+    const airline_id = airline.data.id 
+    axio.post('/api/v1/reviews', {review, airline_id})
+    .then(resp => {
+      debugger
+    })
+    .catch(resp=> {})
+  }
+
   return (
     <Wrapper>
-      <Column>
-        <Main>
-          {loaded && (
-            <Header
+      {loaded && (
+        <>
+          <Column>
+            <Main>
+              <Header
+                attributes={airline.data.attributes}
+                reviews={airline.included}
+              />
+              <div className="reviews"></div>
+            </Main>
+          </Column>
+          <Column>
+            <ReviewForm 
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
               attributes={airline.data.attributes}
-              reviews={airline.included}
+              review={review}
             />
-          )}
-          <div className="reviews"></div>
-        </Main>
-      </Column>
-      <Column>
-        <div className="review-form">Review goes here</div>
-      </Column>
+          </Column>
+        </>
+      )}
     </Wrapper>
   );
 }
