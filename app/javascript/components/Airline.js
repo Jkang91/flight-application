@@ -50,9 +50,11 @@ function Airline(props) {
     e.preventDefault()
 
     const csrfToken = document.querySelector('[name=csrf-token]').content
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken
 
+    
     const airline_id = airline.data.id 
-    axio.post('/api/v1/reviews', {review, airline_id})
+    axios.post('/api/v1/reviews', {review, airline_id})
     .then(resp => {
       debugger
     })
